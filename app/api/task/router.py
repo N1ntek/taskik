@@ -6,7 +6,7 @@ from . import crud
 from .schemas import Task, TaskCreate
 from app.core.database import db
 
-router = APIRouter(prefix="/tasks", tags=["task"])
+router = APIRouter(prefix="/tasks", tags=["tasks"])
 
 
 @router.get("/", response_model=list[Task])
@@ -38,11 +38,11 @@ async def get_task_by_id(
     """
     Get a task by id
     """
-    task = crud.get_task_by_id(session, task_id)
+    task = await crud.get_task_by_id(session, task_id)
     if task:
-        return await task
+        return task
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
-        detail="Task {task_id} not found",
+        detail=f"Task {task_id} not found",
     )

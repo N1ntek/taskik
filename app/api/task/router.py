@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
 
 from app.core.database import db
 from . import crud
@@ -50,3 +51,11 @@ async def update_task(
     Update a task
     """
     return await crud.update_task(session, task, task_update)
+
+
+@router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_task(
+        task: Task = Depends(task_by_id),
+        session: AsyncSession = Depends(db.session_dependency),
+) -> None:
+    return await crud.delete_task(session, task)

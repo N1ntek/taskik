@@ -1,17 +1,17 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette import status
 
-from . import crud
-from .schemas import Task, TaskCreate
 from app.core.database import db
+from . import crud
+from .dependencies import task_by_id
+from .schemas import Task, TaskCreate, TaskUpdate
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
 
 @router.get("/", response_model=list[Task])
 async def get_tasks(
-    session: AsyncSession = Depends(db.session_dependency),
+        session: AsyncSession = Depends(db.session_dependency),
 ):
     """
     Get all tasks ordered by id
@@ -19,10 +19,10 @@ async def get_tasks(
     return await crud.get_tasks(session)
 
 
-@router.post("/task", response_model=Task)
+@router.post("/create", response_model=Task)
 async def create_task(
-    task: TaskCreate,
-    session: AsyncSession = Depends(db.session_dependency),
+        task: TaskCreate,
+        session: AsyncSession = Depends(db.session_dependency),
 ):
     """
     Create a new task
@@ -32,17 +32,21 @@ async def create_task(
 
 @router.get("/{task_id}", response_model=Task)
 async def get_task_by_id(
-    task_id: int,
-    session: AsyncSession = Depends(db.session_dependency),
+        task: Task = Depends(task_by_id),
 ):
     """
     Get a task by id
     """
-    task = await crud.get_task_by_id(session, task_id)
-    if task:
-        return task
+    return task
 
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Task {task_id} not found",
-    )
+
+@router.patch("/{task_id}", response_model=Task)
+async def update_task(
+        task_update: TaskUpdate,
+        task: Task = Depends(task_by_id),
+        session: AsyncSession = Depends(db.session_dependency),
+):
+    """
+    Update a task
+    """
+    return await crud.update_task(session, task, task_update)

@@ -23,5 +23,5 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.black]
-include = '\.py$'
+include = '\.pyi?$'
 exclude = ''

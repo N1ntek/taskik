@@ -9,8 +9,8 @@ from app.core.database import db
 
 
 async def task_by_id(
-        task_id: Annotated[int, Path],
-        session: AsyncSession = Depends(db.session_dependency),
+    task_id: Annotated[int, Path],
+    session: AsyncSession = Depends(db.session_dependency),
 ) -> Task:
     task = await crud.get_task_by_id(session, task_id)
     if task:

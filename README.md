@@ -1,1 +1,1 @@
-Minimalistik and cute task manager.
+Minimalistic and cute task manager.

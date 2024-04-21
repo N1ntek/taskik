@@ -8,6 +8,9 @@ from app.api.task import crud
 from app.api.task.dependencies import task_by_id
 from app.api.task.schemas import Task, TaskCreate, TaskUpdate
 
+from app.api.subtasks.schemas import SubTask, SubTaskCreate
+
+
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
 
@@ -54,3 +57,20 @@ async def delete_task(
     Delete a task
     """
     return await crud.delete_task(session, task)
+
+
+@router.get("/{task_id}/subtasks", response_model=list[SubTask])
+async def get_subtasks(
+        task_id: int,
+        session: AsyncSession = Depends(db.session_dependency),
+):
+    ...
+
+
+@router.post("/{task_id}/subtasks/create", response_model=SubTask)
+async def create_subtask(
+        task_id: int,
+        subtask: SubTaskCreate,
+        session: AsyncSession = Depends(db.session_dependency),
+):
+    ...

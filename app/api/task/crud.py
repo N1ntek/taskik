@@ -29,7 +29,8 @@ async def update_task(
     session: AsyncSession, task: Task, task_update: TaskUpdate
 ) -> Task | None:
     for key, value in task_update.model_dump().items():
-        setattr(task, key, value)
+        if value is not None:
+            setattr(task, key, value)
     await session.commit()
     return task
 

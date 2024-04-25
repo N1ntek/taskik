@@ -1,7 +1,12 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.task.models import Task
+from app.api.subtasks.models import SubTask
 
 
-async def create_subtask(session: AsyncSession, task_id: int, subtask_in: SubTaskCreate) -> Task:
-    ...
+async def get_subtask(session: AsyncSession, subtask_id: int) -> SubTask: ...
+
+
+async def update_subtask(session: AsyncSession, subtask_id: int) -> SubTask: ...
+
+
+async def delete_subtask(session: AsyncSession, subtask_id: int) -> None: ...

@@ -2,6 +2,8 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
+from app.api.subtasks.schemas import SubTask
+
 
 class Task(BaseModel):
     id: int

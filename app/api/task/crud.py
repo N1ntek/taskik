@@ -2,7 +2,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.engine import Result
 
+from api.subtasks.schemas import SubTaskCreate
 from app.api.task.models import Task
+from app.api.subtasks.models import SubTask
 from app.api.task.schemas import TaskCreate, TaskUpdate
 
 
@@ -21,7 +23,6 @@ async def create_task(session: AsyncSession, task_in: TaskCreate) -> Task | None
     task = Task(**task_in.model_dump())
     session.add(task)
     await session.commit()
-
     return task
 
 
@@ -37,3 +38,19 @@ async def update_task(
 async def delete_task(session: AsyncSession, task: Task) -> None:
     await session.delete(task)
     await session.commit()
+
+
+async def get_subtasks(session: AsyncSession, task_id) -> list[SubTask]:
+    stmt = select(SubTask).where(SubTask.task_id == task_id).order_by(SubTask.id)
+    result: Result = await session.execute(stmt)
+    subtasks = result.scalars().all()
+    return list(subtasks)
+
+
+async def create_subtask(
+    session: AsyncSession, task: Task, subtask_in: SubTaskCreate
+) -> SubTask:
+    subtask = SubTask(**subtask_in.model_dump(), task=task)
+    session.add(subtask)
+    await session.commit()
+    return subtask

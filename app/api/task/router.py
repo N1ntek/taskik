@@ -21,7 +21,7 @@ async def get_tasks(
     return await crud.get_tasks(session)
 
 
-@router.post("/create", response_model=Task, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=Task, status_code=status.HTTP_201_CREATED)
 async def create_task(
     task: TaskCreate,
     session: AsyncSession = Depends(db.session_dependency),
@@ -61,16 +61,22 @@ async def delete_task(
 
 @router.get("/{task_id}/subtasks", response_model=list[SubTask])
 async def get_subtasks(
-        task_id: int,
-        session: AsyncSession = Depends(db.session_dependency),
+    task_id: int,
+    session: AsyncSession = Depends(db.session_dependency),
 ):
-    ...
+    """
+    Get all subtasks of a task
+    """
+    return await crud.get_subtasks(session, task_id)
 
 
-@router.post("/{task_id}/subtasks/create", response_model=SubTask)
+@router.post("/{task_id}/subtasks/", response_model=SubTask, status_code=status.HTTP_201_CREATED)
 async def create_subtask(
-        task_id: int,
-        subtask: SubTaskCreate,
-        session: AsyncSession = Depends(db.session_dependency),
+    subtask_in: SubTaskCreate,
+    task: Task = Depends(task_by_id),
+    session: AsyncSession = Depends(db.session_dependency),
 ):
-    ...
+    """
+    Crete a subtask
+    """
+    return await crud.create_subtask(session, task, subtask_in)

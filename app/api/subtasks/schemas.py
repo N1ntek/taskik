@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 
-from app.api.task.models import Task
+from app.api.tasks.models import Task
 
 
 class SubTask(BaseModel):

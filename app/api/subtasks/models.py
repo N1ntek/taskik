@@ -1,9 +1,13 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.models.base import Base
+
+if TYPE_CHECKING:
+    from app.api.tasks.models import Task
 
 
 class SubTask(Base):

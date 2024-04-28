@@ -1,9 +1,13 @@
+from typing import TYPE_CHECKING
 from datetime import datetime
 
-from sqlalchemy import String, DateTime
+from sqlalchemy import DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.models.base import Base
+
+if TYPE_CHECKING:
+    from app.api.subtasks.models import SubTask
 
 
 class Task(Base):
@@ -12,4 +16,4 @@ class Task(Base):
     body: Mapped[str]
     completed: Mapped[bool] = mapped_column(default=False)
     created_at: Mapped[str] = mapped_column(DateTime, default=datetime.utcnow)
-    subtasks: Mapped[list["SubTask"]] = relationship(back_populates="task")
+    subtasks: Mapped[list["SubTask"]] = relationship(back_populates="tasks")

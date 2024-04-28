@@ -1,11 +1,12 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.engine import Result
+from sqlalchemy.orm import selectinload
 
-from api.subtasks.schemas import SubTaskCreate
-from app.api.task.models import Task
+from app.api.subtasks.schemas import SubTaskCreate
+from app.api.tasks.models import Task
 from app.api.subtasks.models import SubTask
-from app.api.task.schemas import TaskCreate, TaskUpdate
+from app.api.tasks.schemas import TaskCreate, TaskUpdate
 
 
 async def get_tasks(session: AsyncSession) -> list[Task]:
@@ -16,7 +17,10 @@ async def get_tasks(session: AsyncSession) -> list[Task]:
 
 
 async def get_task_by_id(session: AsyncSession, task_id: int) -> Task | None:
-    return await session.get(Task, task_id)
+    stmt = select(Task).options(selectinload(Task.subtasks)).where(Task.id == task_id)
+    result = await session.execute(stmt)
+    task = result.scalar_one_or_none()
+    return task
 
 
 async def create_task(session: AsyncSession, task_in: TaskCreate) -> Task | None:
@@ -40,11 +44,8 @@ async def delete_task(session: AsyncSession, task: Task) -> None:
     await session.commit()
 
 
-async def get_subtasks(session: AsyncSession, task_id) -> list[SubTask]:
-    stmt = select(SubTask).where(SubTask.task_id == task_id).order_by(SubTask.id)
-    result: Result = await session.execute(stmt)
-    subtasks = result.scalars().all()
-    return list(subtasks)
+async def get_subtasks(task: Task) -> list[SubTask]:
+    return task.subtasks
 
 
 async def create_subtask(

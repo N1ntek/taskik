@@ -6,7 +6,7 @@ from app.core.database import db
 
 from app.api.tasks import crud
 from app.api.tasks.dependencies import task_by_id
-from app.api.tasks.schemas import Task, TaskCreate, TaskUpdate
+from app.api.tasks.schemas import Task, TaskCreate, TaskUpdate, TaskWithSubtasks
 
 from app.api.subtasks.schemas import SubTask, SubTaskCreate
 
@@ -33,7 +33,7 @@ async def create_task(
     return await crud.create_task(session, task)
 
 
-@router.get("/{task_id}", response_model=Task)
+@router.get("/{task_id}", response_model=TaskWithSubtasks)
 async def get_task(task: Task = Depends(task_by_id)):
     """
     Get a task by id

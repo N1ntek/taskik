@@ -16,4 +16,4 @@ class Task(Base):
     body: Mapped[str]
     completed: Mapped[bool] = mapped_column(default=False)
     created_at: Mapped[str] = mapped_column(DateTime, default=datetime.utcnow)
-    subtasks: Mapped[list["SubTask"]] = relationship(back_populates="tasks")
+    subtasks: Mapped[list["SubTask"]] = relationship(back_populates="task")

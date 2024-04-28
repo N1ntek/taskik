@@ -18,7 +18,7 @@ async def get_tasks(session: AsyncSession) -> list[Task]:
 
 async def get_task_by_id(session: AsyncSession, task_id: int) -> Task | None:
     stmt = select(Task).options(selectinload(Task.subtasks)).where(Task.id == task_id)
-    result = await session.execute(stmt)
+    result: Result = await session.execute(stmt)
     task = result.scalar_one_or_none()
     return task
 

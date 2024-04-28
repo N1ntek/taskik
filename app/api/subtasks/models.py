@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, ForeignKey
+from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.models.base import Base
@@ -10,7 +11,7 @@ if TYPE_CHECKING:
     from app.api.tasks.models import Task
 
 
-class SubTask(Base):
+class SubTask(AsyncAttrs, Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str]
     body: Mapped[str]

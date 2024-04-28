@@ -13,6 +13,10 @@ class Task(BaseModel):
     created_at: datetime
 
 
+class TaskWithSubtasks(Task):
+    subtasks: list[SubTask] = []
+
+
 class TaskCreate(BaseModel):
     title: str
     body: str

@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import Path, Depends
+from fastapi import Path, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.subtasks import crud
@@ -12,11 +12,12 @@ async def subtask_by_id(
     subtask_id: Annotated[int, Path],
     session: AsyncSession = Depends(db.session_dependency),
 ) -> SubTask:
-    await crud.get_subtask(session, subtask_id)
+    subtask = await crud.get_subtask(session, subtask_id)
 
+    if subtask:
+        return subtask
 
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Task {task_id} not found",
+        detail=f"Subtask {subtask_id} not found",
     )
-

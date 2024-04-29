@@ -14,3 +14,9 @@ class SubTask(BaseModel):
 class SubTaskCreate(BaseModel):
     title: str
     body: str
+
+
+class SubTaskUpdate(BaseModel):
+    title: str | None = None
+    body: str | None = None
+    completed: bool | None = None

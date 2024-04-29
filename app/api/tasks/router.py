@@ -72,7 +72,9 @@ async def get_subtasks(task: Task = Depends(task_by_id)):
     return await crud.get_subtasks(task)
 
 
-@router.post("/{task_id}/subtasks/", response_model=SubTask, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/{task_id}/subtasks/", response_model=SubTask, status_code=status.HTTP_201_CREATED
+)
 async def create_subtask(
     subtask_in: SubTaskCreate,
     task: Task = Depends(task_by_id),

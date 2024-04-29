@@ -10,7 +10,11 @@ async def get_subtask(session: AsyncSession, subtask_id: int) -> SubTask | None:
     return await session.get(SubTask, subtask_id)
 
 
-async def update_subtask(session: AsyncSession, subtask_id: int, subtask_in) -> SubTask: ...
+async def update_subtask(session: AsyncSession, subtask_id: int, subtask_in) -> SubTask:
+    ...
 
 
-async def delete_subtask(session: AsyncSession, subtask_id: int) -> None: ...
+
+async def delete_subtask(session: AsyncSession, subtask_id: int) -> None:
+    # await session.delete(subtask_id)
+    ...

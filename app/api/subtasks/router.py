@@ -5,16 +5,14 @@ from app.core.database import db
 from app.api.subtasks import crud
 
 from app.api.subtasks.schemas import SubTask, SubTaskCreate, SubTaskUpdate
+from app.api.subtasks.dependencies import subtask_by_id
 
 router = APIRouter(prefix="/subtasks/{subtask_id}", tags=["subtasks"])
 
 
-@router.get("/")
-async def get_subtask(
-    subtask_id: int,
-    session: AsyncSession = Depends(db.session_dependency),
-):
-    return await crud.get_subtask(session, subtask_id)
+@router.get("/", response_model=SubTask)
+async def get_subtask(subtask: SubTask = Depends(subtask_by_id)):
+    return subtask
 
 
 @router.patch("/")

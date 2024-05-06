@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.subtasks.models import SubTask
+from app.core.models import SubTask
 from app.api.subtasks.schemas import SubTaskUpdate
 
 

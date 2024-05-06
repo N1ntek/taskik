@@ -4,9 +4,9 @@ from sqlalchemy.engine import Result
 from sqlalchemy.orm import selectinload
 
 from app.api.subtasks.schemas import SubTaskCreate
-from app.api.tasks.models import Task
-from app.api.subtasks.models import SubTask
 from app.api.tasks.schemas import TaskCreate, TaskUpdate
+from app.core.models import Task
+from app.core.models import SubTask
 
 
 async def get_tasks(session: AsyncSession) -> list[Task]:

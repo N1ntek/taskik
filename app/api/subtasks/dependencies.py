@@ -4,7 +4,7 @@ from fastapi import Path, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.subtasks import crud
-from app.api.subtasks.models import SubTask
+from app.core.models import SubTask
 from app.core.database import db
 
 

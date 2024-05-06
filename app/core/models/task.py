@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.models.base import Base
 
 if TYPE_CHECKING:
-    from app.api.subtasks.models import SubTask
+    from app.core.models import SubTask
 
 
 class Task(Base):

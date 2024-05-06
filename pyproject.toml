@@ -14,6 +14,7 @@ sqlalchemy = "^2.0.28"
 asyncpg = "^0.29.0"
 alembic = "^1.13.1"
 pydantic-settings = "^2.2.1"
+pyjwt = {extras = ["crypto"], version = "^2.8.0"}
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.2.0"
@@ -24,4 +25,3 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 include = '\.pyi?$'
-exclude = ''

@@ -1,6 +1,7 @@
+from uuid import UUID
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from sqlalchemy.engine import Result
 from sqlalchemy.orm import selectinload
 
 from app.api.subtasks.schemas import SubTaskCreate
@@ -11,14 +12,14 @@ from app.core.models import SubTask
 
 async def get_tasks(session: AsyncSession) -> list[Task]:
     stmt = select(Task).order_by(Task.id)
-    result: Result = await session.execute(stmt)
+    result = await session.execute(stmt)
     tasks = result.scalars().all()
     return list(tasks)
 
 
-async def get_task_by_id(session: AsyncSession, task_id: int) -> Task | None:
+async def get_task_by_id(session: AsyncSession, task_id: UUID) -> Task | None:
     stmt = select(Task).options(selectinload(Task.subtasks)).where(Task.id == task_id)
-    result: Result = await session.execute(stmt)
+    result = await session.execute(stmt)
     task = result.scalar_one_or_none()
     return task
 

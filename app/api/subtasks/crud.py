@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.models import SubTask
@@ -6,7 +8,7 @@ from app.api.subtasks.schemas import SubTaskUpdate
 
 async def get_subtask(
     session: AsyncSession,
-    subtask_id: int,
+    subtask_id: UUID,
 ) -> SubTask | None:
     """
     Get a subtask by id

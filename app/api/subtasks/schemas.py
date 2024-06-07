@@ -1,14 +1,16 @@
+from uuid import UUID
+
 from pydantic import BaseModel
 from datetime import datetime
 
 
 class SubTask(BaseModel):
-    id: int
+    id: UUID
     title: str
     body: str
     completed: bool
     created_at: datetime
-    task_id: int
+    task_id: UUID
 
 
 class SubTaskCreate(BaseModel):

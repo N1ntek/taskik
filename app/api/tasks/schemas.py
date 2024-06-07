@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import UUID
 
 from pydantic import BaseModel
 
@@ -6,7 +7,7 @@ from app.api.subtasks.schemas import SubTask
 
 
 class Task(BaseModel):
-    id: int
+    id: UUID
     title: str
     body: str
     completed: bool

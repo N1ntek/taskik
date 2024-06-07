@@ -1,4 +1,5 @@
 from typing import Annotated
+from uuid import UUID
 
 from fastapi import Path, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,7 +10,7 @@ from app.core.database import db
 
 
 async def subtask_by_id(
-    subtask_id: Annotated[int, Path],
+    subtask_id: Annotated[UUID, Path],
     session: AsyncSession = Depends(db.session_dependency),
 ) -> SubTask:
     subtask = await crud.get_subtask(session, subtask_id)

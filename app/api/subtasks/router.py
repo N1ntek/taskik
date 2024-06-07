@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import db
 from app.api.subtasks import crud
 
-from app.api.subtasks.schemas import SubTask, SubTaskCreate, SubTaskUpdate
+from app.api.subtasks.schemas import SubTask, SubTaskUpdate
 from app.api.subtasks.dependencies import subtask_by_id
 
 router = APIRouter(prefix="/subtasks/{subtask_id}", tags=["subtasks"])

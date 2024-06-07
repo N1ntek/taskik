@@ -1,4 +1,5 @@
 from typing import Annotated
+from uuid import UUID
 
 from fastapi import Path, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,7 +10,7 @@ from app.core.database import db
 
 
 async def task_by_id(
-    task_id: Annotated[int, Path],
+    task_id: Annotated[UUID, Path],
     session: AsyncSession = Depends(db.session_dependency),
 ) -> Task:
     task = await crud.get_task_by_id(session, task_id)

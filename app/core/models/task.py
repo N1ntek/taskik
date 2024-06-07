@@ -1,7 +1,8 @@
+from datetime import datetime, UTC
 from typing import TYPE_CHECKING
-from datetime import datetime
+from uuid import UUID
 
-from sqlalchemy import DateTime
+from sqlalchemy import text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.models.base import Base
@@ -11,9 +12,9 @@ if TYPE_CHECKING:
 
 
 class Task(Base):
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
     title: Mapped[str]
     body: Mapped[str]
     completed: Mapped[bool] = mapped_column(default=False)
-    created_at: Mapped[str] = mapped_column(DateTime, default=datetime.utcnow)
-    subtasks: Mapped[list["SubTask"]] = relationship(back_populates="task")
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC).replace(tzinfo=None))
+    subtasks: Mapped[list["SubTask"]] = relationship(back_populates="task", cascade="all, delete")

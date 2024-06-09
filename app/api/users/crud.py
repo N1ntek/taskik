@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from pydantic import EmailStr
 from sqlalchemy import select
 from fastapi import HTTPException
@@ -25,7 +27,13 @@ async def create_user(session: AsyncSession, user_in: UserCreate) -> User:
     return user
 
 
-async def get_user_by_email(session: AsyncSession, user_email: EmailStr) -> User:
-    stmt = select(User).where(User.email == user_email)
+async def get_user_by_id(session: AsyncSession, user_id: str) -> User:
+    stmt = select(User).where(User.id == user_id)
+    result = await session.execute(stmt)
+    return result.scalar_one_or_none()
+
+
+async def get_user_by_email(session: AsyncSession, email: EmailStr) -> User:
+    stmt = select(User).where(User.email == email)
     result = await session.execute(stmt)
     return result.scalar_one_or_none()

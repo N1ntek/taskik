@@ -33,4 +33,5 @@ async def auth_user_check_self_info(
     return {
         "username": current_user.username,
         "email": current_user.email,
+        "login_at": current_user.active,
     }

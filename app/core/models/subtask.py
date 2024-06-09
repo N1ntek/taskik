@@ -9,7 +9,7 @@ from app.core.models.base import Base
 
 
 if TYPE_CHECKING:
-    from app.core.models import Task
+    from app.core.models import Task, User
 
 
 class SubTask(Base):
@@ -18,5 +18,7 @@ class SubTask(Base):
     body: Mapped[str]
     completed: Mapped[bool] = mapped_column(default=False)
     created_at: Mapped[str] = mapped_column(DateTime, default=datetime.now(UTC).replace(tzinfo=None))
-    task_id: Mapped[UUID] = mapped_column(ForeignKey("tasks.id", ondelete="CASCADE"))  # проверить это
+    task_id: Mapped[UUID] = mapped_column(ForeignKey("tasks.id", ondelete="CASCADE"), nullable=False)
     task: Mapped["Task"] = relationship(back_populates="subtasks")
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    user: Mapped["User"] = relationship(back_populates="tasks")

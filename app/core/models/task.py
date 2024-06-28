@@ -12,11 +12,29 @@ if TYPE_CHECKING:
 
 
 class Task(Base):
-    id: Mapped[UUID] = mapped_column(primary_key=True, server_default=text("gen_random_uuid()"))
+    id: Mapped[UUID] = mapped_column(
+        primary_key=True, server_default=text("gen_random_uuid()")
+    )
     title: Mapped[str]
     body: Mapped[str]
     completed: Mapped[bool] = mapped_column(default=False)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.now(UTC).replace(tzinfo=None))
+    created_at: Mapped[datetime] = mapped_column(
+        default=datetime.now(UTC).replace(tzinfo=None)
+    )
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
     user: Mapped["User"] = relationship(back_populates="tasks")
-    subtasks: Mapped[list["SubTask"]] = relationship(back_populates="task", cascade="all, delete")
+    subtasks: Mapped[list["SubTask"]] = relationship(
+        back_populates="task", cascade="all, delete"
+    )
+
+    # // TODO
+    # parent_id: Mapped[UUID] = mapped_column(ForeignKey('tasks.id'), nullable=True)
+    #
+    # parent: Mapped["Task"] = relationship(
+    #     remote_side=id,
+    #     back_populates='children'
+    # )
+    #
+    # children: Mapped[list["Task"]] = relationship(
+    #     back_populates='parent', cascade="all, delete-orphan"
+    # )

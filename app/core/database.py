@@ -1,6 +1,10 @@
+from typing import Annotated
+
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
     async_sessionmaker,
+    AsyncSession,
 )
 
 from app.core.config import settings
@@ -8,11 +12,12 @@ from app.core.config import settings
 
 class Database:
     def __init__(
-            self, url: str,
-            echo: bool,
-            echo_pool: bool = False,
-            pool_size: int = 5,
-            max_overflow: int = 10,
+        self,
+        url: str,
+        echo: bool,
+        echo_pool: bool = False,
+        pool_size: int = 5,
+        max_overflow: int = 10,
     ):
         self.engine = create_async_engine(
             url=url,
@@ -41,3 +46,5 @@ db = Database(
     pool_size=settings.db.pool_size,
     max_overflow=settings.db.max_overflow,
 )
+
+SessionDep = Annotated[AsyncSession, Depends(db.session_dependency)]

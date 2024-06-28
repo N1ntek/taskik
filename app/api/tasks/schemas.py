@@ -12,6 +12,7 @@ class Task(BaseModel):
     body: str
     completed: bool
     created_at: datetime
+    user_id: UUID
 
 
 class TaskWithSubtasks(Task):

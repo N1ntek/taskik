@@ -1,5 +1,3 @@
-from uuid import UUID
-
 from pydantic import EmailStr
 from sqlalchemy import select
 from fastapi import HTTPException
@@ -15,7 +13,7 @@ async def create_user(session: AsyncSession, user_in: UserCreate) -> User:
     if await session.scalar(select(User).where(User.email == user_in.email)):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="user with this email already exists"
+            detail="user with this email already exists",
         )
     user = User(
         username=user_in.username,

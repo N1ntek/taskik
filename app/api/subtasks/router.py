@@ -1,32 +1,31 @@
-from fastapi import APIRouter, Depends, status
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, status
 
-from app.core.database import db
+from app.core.database import SessionDep
 from app.api.subtasks import crud
 
 from app.api.subtasks.schemas import SubTask, SubTaskUpdate
-from app.api.subtasks.dependencies import subtask_by_id
+from app.api.subtasks.dependencies import SubtaskByIdDep
 
 router = APIRouter(prefix="/subtasks/{subtask_id}", tags=["subtasks"])
 
 
 @router.get("/", response_model=SubTask)
-async def get_subtask(subtask: SubTask = Depends(subtask_by_id)):
+async def get_subtask(subtask: SubtaskByIdDep):
     return subtask
 
 
 @router.patch("/", response_model=SubTask)
 async def update_subtask(
+    session: SessionDep,
+    subtask: SubtaskByIdDep,
     subtask_update: SubTaskUpdate,
-    subtask: SubTask = Depends(subtask_by_id),
-    session: AsyncSession = Depends(db.session_dependency),
 ):
     return await crud.update_subtask(session, subtask, subtask_update)
 
 
 @router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_subtask(
-    subtask: SubTask = Depends(subtask_by_id),
-    session: AsyncSession = Depends(db.session_dependency),
+    session: SessionDep,
+    subtask: SubtaskByIdDep,
 ) -> None:
     await crud.delete_subtask(session, subtask)

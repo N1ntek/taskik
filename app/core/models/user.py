@@ -8,7 +8,7 @@ from sqlalchemy.orm import mapped_column, Mapped, relationship
 from app.core.models import Base
 
 if TYPE_CHECKING:
-    from app.core.models import Task, SubTask
+    from app.core.models import Task
 
 
 class User(Base):
@@ -23,8 +23,5 @@ class User(Base):
         default=datetime.now(UTC).replace(tzinfo=None)
     )
     tasks: Mapped[list["Task"]] = relationship(
-        back_populates="user", cascade="all, delete"
-    )
-    subtasks: Mapped[list["SubTask"]] = relationship(
         back_populates="user", cascade="all, delete"
     )

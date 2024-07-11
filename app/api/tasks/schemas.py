@@ -3,7 +3,7 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from app.api.subtasks.schemas import SubTask
+# from app.api.subtasks.schemas import SubTask
 
 
 class Task(BaseModel):
@@ -15,8 +15,12 @@ class Task(BaseModel):
     user_id: UUID
 
 
+class SubTask(Task):
+    parent_id: UUID | None = None
+
+
 class TaskWithSubtasks(Task):
-    subtasks: list[SubTask] = []
+    subtasks: list[Task] = []
 
 
 class TaskCreate(BaseModel):

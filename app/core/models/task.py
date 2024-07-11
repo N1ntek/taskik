@@ -8,7 +8,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.models.base import Base
 
 if TYPE_CHECKING:
-    from app.core.models import SubTask, User
+    from app.core.models import User
 
 
 class Task(Base):
@@ -23,18 +23,13 @@ class Task(Base):
     )
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
     user: Mapped["User"] = relationship(back_populates="tasks")
-    subtasks: Mapped[list["SubTask"]] = relationship(
-        back_populates="task", cascade="all, delete"
+
+    parent_id: Mapped[UUID] = mapped_column(ForeignKey("tasks.id"), nullable=True)
+
+    parent_task: Mapped["Task"] = relationship(
+        remote_side=id, back_populates="subtasks"
     )
 
-    # // TODO
-    # parent_id: Mapped[UUID] = mapped_column(ForeignKey('tasks.id'), nullable=True)
-    #
-    # parent: Mapped["Task"] = relationship(
-    #     remote_side=id,
-    #     back_populates='children'
-    # )
-    #
-    # children: Mapped[list["Task"]] = relationship(
-    #     back_populates='parent', cascade="all, delete-orphan"
-    # )
+    subtasks: Mapped[list["Task"]] = relationship(
+        back_populates="parent_task", cascade="all, delete-orphan"
+    )

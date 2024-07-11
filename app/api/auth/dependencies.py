@@ -11,7 +11,7 @@ from app.api.users.schemas import User
 from app.core.database import SessionDep
 from app.core.security import decode_jwt
 
-reusable_oauth2 = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+reusable_oauth2 = OAuth2PasswordBearer(tokenUrl="/api/auth/token")
 
 TokenDep = Annotated[str, Depends(reusable_oauth2)]
 

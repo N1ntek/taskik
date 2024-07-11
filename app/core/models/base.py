@@ -9,5 +9,5 @@ class Base(DeclarativeBase):
     metadata = MetaData(naming_convention=settings.db.naming_convention)
 
     @declared_attr.directive
-    def __tablename__(cls) -> str:
-        return f"{cls.__name__.lower()}s"
+    def __tablename__(self) -> str:
+        return f"{self.__name__.lower()}s"

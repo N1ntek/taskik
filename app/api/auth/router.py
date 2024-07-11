@@ -9,7 +9,7 @@ from app.core.security import encode_jwt, TokenInfo
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.post("/login", response_model=TokenInfo)
+@router.post("/token", response_model=TokenInfo)
 async def login(
     session: SessionDep,
     form_data: OAuth2PasswordRequestForm = Depends(),

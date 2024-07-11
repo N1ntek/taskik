@@ -8,12 +8,11 @@ from app.api.tasks import crud
 from app.api.tasks.dependencies import TaskByIdDep
 from app.api.tasks.schemas import (
     Task,
+    SubTask,
     TaskCreate,
     TaskUpdate,
     TaskWithSubtasks,
 )
-
-from app.api.subtasks.schemas import SubTask, SubTaskCreate
 
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
@@ -41,12 +40,34 @@ async def get_tasks(
 async def create_task(
     session: SessionDep,
     current_user: CurrentUser,
-    task: TaskCreate,
+    task_in: TaskCreate,
 ):
     """
     Create a new task
     """
-    return await crud.create_task(session, current_user, task)
+    return await crud.create_task(session, current_user, task_in)
+
+
+@router.post(
+    "/{task_id}/subtask/",
+    response_model=SubTask,
+    status_code=status.HTTP_201_CREATED,
+)
+async def create_subtask(
+    session: SessionDep,
+    parent_task: TaskByIdDep,
+    subtask_in: TaskCreate,
+):
+    """
+    Crete a subtask
+    """
+    current_user = parent_task.user
+    return await crud.create_task(
+        session,
+        current_user,
+        subtask_in,
+        parent_task,
+    )
 
 
 @router.get(
@@ -91,26 +112,10 @@ async def delete_task(
 
 @router.get(
     "/{task_id}/subtasks",
-    response_model=list[SubTask],
+    response_model=list[Task],
 )
 async def get_subtasks(task: TaskByIdDep):
     """
     Get all subtasks of a task
     """
     return await crud.get_subtasks(task)
-
-
-@router.post(
-    "/{task_id}/subtasks/",
-    response_model=SubTask,
-    status_code=status.HTTP_201_CREATED,
-)
-async def create_subtask(
-    session: SessionDep,
-    task: TaskByIdDep,
-    subtask_in: SubTaskCreate,
-):
-    """
-    Crete a subtask
-    """
-    return await crud.create_subtask(session, task, subtask_in)
